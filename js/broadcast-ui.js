@@ -33,18 +33,18 @@ var config = {
 
         if (typeof roomsList === 'undefined') roomsList = document.body;
 
-        var tr = document.createElement('tr');
-        tr.setAttribute('id', room.broadcaster);
-        tr.innerHTML = '<td>' + room.roomName + '</td>' +
-            '<td><button class="join" id="' + room.roomToken + '">Join Room</button></td>';
-        roomsList.insertBefore(tr, roomsList.firstChild);
+        var div = document.createElement('div');
+        div.setAttribute('id', room.broadcaster);
+        div.innerHTML = '<span class="roomName">' + room.roomName + '</span>' +
+            '<button class="join" id="' + room.roomToken + '">Watch</button>';
+        roomsList.insertBefore(div, roomsList.firstChild);
 
-        tr.onclick = function () {
-            tr = this;
+        div.onclick = function () {
+            div = this;
             captureUserMedia(false, function () {
                 broadcastUI.joinRoom({
-                    roomToken: tr.querySelector('.join').id,
-                    joinUser: tr.id
+                    roomToken: div.querySelector('.join').id,
+                    joinUser: div.id
                 });
             });
             hideUnnecessaryStuff();
