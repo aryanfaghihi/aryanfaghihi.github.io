@@ -1,3 +1,4 @@
+var isBroadcaster = false;
 var config = {
     openSocket: function (config) {
 
@@ -16,12 +17,15 @@ var config = {
         return socket;
     },
     onRemoteStream: function (media) {
-        // var video = media.video;
-        // video.setAttribute('controls', true);
+        if (!isBroadcaster) {
+            console.log(media);
+            var video = media.video;
+            video.setAttribute('controls', true);
 
-        // participants.insertBefore(video, participants.firstChild);
+            participants.insertBefore(video, participants.firstChild);
 
-        // video.play();
+            video.play();
+        }
     },
     onRoomFound: function (room) {
         var alreadyExist = document.getElementById(room.broadcaster);
@@ -50,6 +54,7 @@ var config = {
 
 function createButtonClickHandler() {
     captureUserMedia(true, function () {
+        isBroadcaster = true;
         broadcastUI.createRoom({
             roomName: (document.getElementById('conference-name') || {}).value || 'Anonymous'
         });
@@ -58,23 +63,27 @@ function createButtonClickHandler() {
 }
 
 function captureUserMedia(isBroadcaster, callback) {
-    var video = document.createElement('video');
-    video.setAttribute('autoplay', true);
-    video.setAttribute('controls', true);
-    participants.insertBefore(video, participants.firstChild);
-    getUserMedia({
-        video: video,
-        onsuccess: function (stream) {
-            config.attachStream = stream;
-            callback && callback();
+    if (isBroadcaster) {
+        var video = document.createElement('video');
+        video.setAttribute('autoplay', true);
+        video.setAttribute('controls', true);
+        participants.insertBefore(video, participants.firstChild);
+        getUserMedia({
+            video: video,
+            onsuccess: function (stream) {
+                config.attachStream = stream;
+                callback && callback();
 
-            video.setAttribute('muted', true);
-        },
-        onerror: function () {
-            alert('unable to get access to your webcam.');
-            callback && callback();
-        }
-    });
+                video.setAttribute('muted', true);
+            },
+            onerror: function () {
+                alert('unable to get access to your webcam.');
+                callback && callback();
+            }
+        });
+    }
+
+    callback();
 }
 
 /* on page load: get public rooms */
