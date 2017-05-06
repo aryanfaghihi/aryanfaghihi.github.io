@@ -41,6 +41,20 @@ var config = {
         div.setAttribute('id', room.broadcaster);
         div.innerHTML = '<span class="roomName">' + room.roomName + '</span>' +
             '<button class="join btn waves-effect" id="' + room.roomToken + '">Watch</button>';
+
+        var found = false;
+        vueStreams.streams.forEach(function (stream) {
+            if (stream.name === room.roomName) found = true;
+        });
+        if (!found) {
+            vueStreams.streams.push({
+                    name: room.roomName,
+                    token: room.roomToken,
+                    broadcaster: room.broadcaster
+                }
+            );
+        }
+
         roomsList.insertBefore(div, roomsList.firstChild);
 
         div.onclick = function () {
@@ -110,24 +124,47 @@ function showComments(roomId) {
     // HIDE THE ROOMS
     $('.visible').hide();
     $('#comments').show();
+    vueComments.showComments = true;
     handleComments(roomId)
 }
 
-var vueComm = new Vue({
+var vueComments = new Vue({
     el: '#comments',
     data: {
-        comments: []
+        comments: [],
+        streams: [],
+        showComments: false
     }
+});
+
+var vueStreams = new Vue({
+    el: '#streams',
+    data: {
+        streams: []
+    },
+    methods: {
+        watchStream: function (data) {
+            captureUserMedia(false, function () {
+                broadcastUI.joinRoom({
+                    roomToken: data.token,
+                    joinUser: data.broadcaster
+                });
+            });
+            handleComments(data.token);
+        }
+    }
+
 });
 
 
 function handleComments(roomId) {
     ROOMID = roomId;
+    vueComments.showComments = true;
     setInterval(function () {
         axios.get(commentsDomain + '/comments?roomId=' + roomId)
             .then(function (res) {
                 console.log(res.data);
-                vueComm.comments = res.data;
+                vueComments.comments = res.data;
             })
     }, 1000);
 }

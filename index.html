@@ -24,12 +24,10 @@
 <div>
     <nav>
         <div class="nav-wrapper">
-            <a href="#" class="brand-logo">Auction Live</a>
+            <a href="#" class="brand-logo">&nbsp;Auction Live</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a href="">Join Auction Live</a></li>
-                <li><a herf="">Log In!</a></li>
-                <li>
-                </li>
+                <li><a herf="">Log In</a></li>
             </ul>
         </div>
     </nav>
@@ -41,23 +39,26 @@
                 <input id="conference-name" type="text">
                 <label for="conference-name">What are you selling today?</label>
             </div>
-        </div>
-        <div class="center-align">
-            <a class="btn waves-effect" id="start-conferencing">Go live</a>
+            <div class="center-align col s12">
+                <a class="btn waves-effect" id="start-conferencing">Go live</a>
+            </div>
         </div>
 
-        <div class="row">
-            <div class="col s6 m3">
-                <div class="card small">
-                    <div class="card-image">
-                        <img src="images/airplane.png">
-                        <span class="card-title">Someone's Ariplane</span>
-                    </div>
-                    <div class="card-content">
-                        <p>Someone is selling an Airplane</p>
-                    </div>
-                    <div class="card-action">
-                        <a href="#">Place a Bid</a>
+
+        <div id="streams">
+            <div class="row">
+                <div class="col s6 m3" v-for="stream in streams">
+                    <div class="card small">
+                        <div class="card-image">
+                            <img src="images/airplane.png">
+                            <span class="card-title">{{stream.name}}</span>
+                        </div>
+                        <div class="card-content">
+                            <p>Live to sell something</p>
+                        </div>
+                        <div class="card-action">
+                            <a @click='watchStream(stream)' style="cursor: pointer;">Watch now</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -70,7 +71,7 @@
                         <span class="card-title">SoZoo's Baboon</span>
                     </div>
                     <div class="card-content">
-                        <p>Zoo is selling a Baboon</p>
+                        <p>Zoo is selling an Baboon</p>
                     </div>
                     <div class="card-action">
                         <a href="#">Place a Bid</a>
@@ -116,29 +117,29 @@
 
         <div>
         </div>
-
-        <div id="comments">
+        <div id="comments" v-show="showComments">
             <ul class="collection with-header">
                 <li class="collection-header"><h4>Comments</h4></li>
-
-                <li class="collection-item" v-for="data in comments">{{data.comment}}<div><a href="#!" class="secondary-content"></a></div></li>
+                <li class="collection-item" v-show="comments.length == 0">No comments yet</li>
+                <li class="collection-item" v-for="data in comments">{{data.comment}}
+                    <div><a href="#!" class="secondary-content"></a></div>
+                </li>
 
             </ul>
-        </div>
 
-        <div class="row">
-            <div class="col s12">
-                <div class="input-field col s6 offset-s5 ">
+            <div class="row">
+                <div class="input-field col s11">
                     <i class="material-icons prefix">mode_edit</i>
                     <textarea id="comment_box" class="materialize-textarea"></textarea>
                     <label for="comment_box">Write a comment</label>
-                    <div class="submit col s12 offset-s12 ">
-                        <button onclick="postComment()" class="btn-floating waves-effect waves-light blue"><i
-                            class="material-icons">send</i></button>
-                    </div>
                 </div>
+
+                <button onclick="postComment()" class="btn-floating waves-effect waves-light blue" style="margin-top: 20px">
+                    <i class="material-icons">send</i>
+                </button>
             </div>
         </div>
+
 
     </div>
 
