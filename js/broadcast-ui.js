@@ -16,13 +16,12 @@ var config = {
         return socket;
     },
     onRemoteStream: function (media) {
-        var video = media.video;
-        video.setAttribute('controls', true);
+        // var video = media.video;
+        // video.setAttribute('controls', true);
 
-        participants.insertBefore(video, participants.firstChild);
+        // participants.insertBefore(video, participants.firstChild);
 
-        video.play();
-        rotateVideo(video);
+        // video.play();
     },
     onRoomFound: function (room) {
         var alreadyExist = document.getElementById(room.broadcaster);
@@ -38,7 +37,7 @@ var config = {
 
         tr.onclick = function () {
             tr = this;
-            captureUserMedia(function () {
+            captureUserMedia(false, function () {
                 broadcastUI.joinRoom({
                     roomToken: tr.querySelector('.join').id,
                     joinUser: tr.id
@@ -50,7 +49,7 @@ var config = {
 };
 
 function createButtonClickHandler() {
-    captureUserMedia(function () {
+    captureUserMedia(true, function () {
         broadcastUI.createRoom({
             roomName: (document.getElementById('conference-name') || {}).value || 'Anonymous'
         });
@@ -58,12 +57,11 @@ function createButtonClickHandler() {
     hideUnnecessaryStuff();
 }
 
-function captureUserMedia(callback) {
+function captureUserMedia(isBroadcaster, callback) {
     var video = document.createElement('video');
     video.setAttribute('autoplay', true);
     video.setAttribute('controls', true);
     participants.insertBefore(video, participants.firstChild);
-
     getUserMedia({
         video: video,
         onsuccess: function (stream) {
@@ -71,7 +69,6 @@ function captureUserMedia(callback) {
             callback && callback();
 
             video.setAttribute('muted', true);
-            rotateVideo(video);
         },
         onerror: function () {
             alert('unable to get access to your webcam.');
@@ -96,13 +93,6 @@ function hideUnnecessaryStuff() {
     for (var i = 0; i < length; i++) {
         visibleElements[i].style.display = 'none';
     }
-}
-
-function rotateVideo(video) {
-    video.style[navigator.mozGetUserMedia ? 'transform' : '-webkit-transform'] = 'rotate(0deg)';
-    setTimeout(function () {
-        video.style[navigator.mozGetUserMedia ? 'transform' : '-webkit-transform'] = 'rotate(360deg)';
-    }, 1000);
 }
 
 (function () {
