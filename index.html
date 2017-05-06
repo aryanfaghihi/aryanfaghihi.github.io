@@ -70,7 +70,7 @@
                         <span class="card-title">SoZoo's Baboon</span>
                     </div>
                     <div class="card-content">
-                        <p>Zoo is selling an Baboon</p>
+                        <p>Zoo is selling a Baboon</p>
                     </div>
                     <div class="card-action">
                         <a href="#">Place a Bid</a>
@@ -116,6 +116,7 @@
 
         <div>
         </div>
+
         <div id="comments">
             <ul class="collection with-header">
                 <li class="collection-header"><h4>Comments</h4></li>
@@ -126,21 +127,18 @@
         </div>
 
         <div class="row">
-            <div class="col s6 offset-s9">
-                <div class="input-field col s6">
+            <div class="col s12">
+                <div class="input-field col s6 offset-s5 ">
                     <i class="material-icons prefix">mode_edit</i>
                     <textarea id="comment_box" class="materialize-textarea"></textarea>
                     <label for="comment_box">Write a comment</label>
+                    <div class="submit col s12 offset-s12 ">
+                        <button onclick="postComment()" class="btn-floating waves-effect waves-light blue"><i
+                            class="material-icons">send</i></button>
+                    </div>
                 </div>
-
-                <button onclick="postComment()" class="btn-floating waves-effect waves-light blue"><i
-                        class="material-icons">send</i></button>
-
             </div>
         </div>
-
-
-
 
     </div>
 
@@ -165,22 +163,34 @@
     <!--};-->
     <!--firebase.initializeApp(config);-->
     <!--</script>-->
-</div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var params = {
+                // Request parameters
+                "q": "cats",
+            };
 
-<script>
-    function postComment() {
-        var commentContent = $('#comment_box').val();
-        console.log(typeof commentContent);
-        axios.post(commentsDomain + '/comments?roomId=' + ROOMID, {
-            comment: commentContent
-        })
-            .then(function (response) {
-                console.log(response.data);
-                $('#comment_box').val('');
+            $.ajax({
+                url: "https://api.cognitive.microsoft.com/bing/v5.0/images/search?" + $.param(params),
+                beforeSend: function(xhrObj){
+                    // Request headers
+                    xhrObj.setRequestHeader("Content-Type","multipart/form-data");
+                    xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","1969f0d261b044fb8b640f1e9828cb53");
+                },
+                // Request body
+                data: "{body}",
             })
-    }
+                .done(function(data) {
+                    console.log(data);
+                    alert("success");
+                })
+                .fail(function(err) {
+                    console.log(err);
+                });
+        });
+    </script>
 
-</script>
-
+</div>
 </body>
 </html>
