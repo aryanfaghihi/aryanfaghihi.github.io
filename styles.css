@@ -9,3 +9,15 @@
 #comments {
 
 }
+
+video {
+    max-width: 640px;
+    max-height: 480px;
+    width: 100%;
+}
+
+#comments {
+    max-width: 640px;
+    width: 100%;
+    margin: 0 auto
+}
