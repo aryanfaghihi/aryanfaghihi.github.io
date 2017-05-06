@@ -28,15 +28,21 @@ var config = {
         }
     },
     onRoomFound: function (room) {
+        console.log('BROADCASTER');
+        console.log(room.broadcaster);
+        console.log(room.roomToken);
+
+
         var alreadyExist = document.getElementById(room.broadcaster);
         if (alreadyExist) return;
+
 
         if (typeof roomsList === 'undefined') roomsList = document.body;
 
         var div = document.createElement('div');
         div.setAttribute('id', room.broadcaster);
         div.innerHTML = '<span class="roomName">' + room.roomName + '</span>' +
-            '<button class="join" id="' + room.roomToken + '">Watch</button>';
+            '<button class="join btn waves-effect" id="' + room.roomToken + '">Watch</button>';
         roomsList.insertBefore(div, roomsList.firstChild);
 
         div.onclick = function () {
@@ -47,7 +53,7 @@ var config = {
                     joinUser: div.id
                 });
             });
-            hideUnnecessaryStuff();
+            showComments(div.querySelector('.join').id);
         };
     }
 };
@@ -57,9 +63,10 @@ function createButtonClickHandler() {
         isBroadcaster = true;
         broadcastUI.createRoom({
             roomName: (document.getElementById('conference-name') || {}).value || 'Anonymous'
+        }, function (roomId) {
+            showComments(roomId);
         });
     });
-    hideUnnecessaryStuff();
 }
 
 function captureUserMedia(isBroadcaster, callback) {
@@ -96,17 +103,15 @@ var roomsList = document.getElementById('rooms-list');
 
 if (startConferencing) startConferencing.onclick = createButtonClickHandler;
 
-function hideUnnecessaryStuff() {
+function showComments(roomId) {
+    console.log('show comments');
+    console.log(roomId);
+    // HIDE THE ROOMS
     var visibleElements = document.getElementsByClassName('visible'),
         length = visibleElements.length;
     for (var i = 0; i < length; i++) {
         visibleElements[i].style.display = 'none';
     }
-}
 
-(function () {
-    var uniqueToken = document.getElementById('unique-token');
-    if (uniqueToken)
-        if (location.hash.length > 2) uniqueToken.parentNode.parentNode.parentNode.innerHTML = '<h2 style="text-align:center;"><a href="' + location.href + '" target="_blank">Share this link</a></h2>';
-        else uniqueToken.innerHTML = uniqueToken.parentNode.parentNode.href = '#' + (Math.random() * new Date().getTime()).toString(36).toUpperCase().replace(/\./g, '-');
-})();
+    $('#comments').show();
+}

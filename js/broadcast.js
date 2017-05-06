@@ -196,12 +196,13 @@ var broadcast = function (config) {
 
     openDefaultSocket();
     return {
-        createRoom: function (_config) {
+        createRoom: function (_config, callback) {
             self.roomName = _config.roomName || 'Anonymous';
             self.roomToken = uniqueToken();
 
             isbroadcaster = true;
             isGetNewRoom = false;
+            callback(self.roomToken);
             startBroadcasting();
         },
         joinRoom: function (_config) {
