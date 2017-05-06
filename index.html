@@ -50,11 +50,10 @@
                 <div class="col s6 m3" v-for="stream in streams">
                     <div class="card small">
                         <div class="card-image">
-                            <img src="images/airplane.png">
-                            <span class="card-title">{{stream.name}}</span>
+                            <img :src="stream.img">
                         </div>
                         <div class="card-content">
-                            <p>Live to sell something</p>
+                            <p style="font-size: 20px">{{stream.name}}</p>
                         </div>
                         <div class="card-action">
                             <a @click='watchStream(stream)' style="cursor: pointer;">Watch now</a>
@@ -63,51 +62,6 @@
                 </div>
             </div>
             <div id="rooms-list" class="visible"></div>
-
-            <div class="col s6 m3">
-                <div class="card small">
-                    <div class="card-image">
-                        <img src="images/baboon.png" align="center">
-                        <span class="card-title">SoZoo's Baboon</span>
-                    </div>
-                    <div class="card-content">
-                        <p>Zoo is selling an Baboon</p>
-                    </div>
-                    <div class="card-action">
-                        <a href="#">Place a Bid</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col s6 m3">
-                <div class="card small">
-                    <div class="card-image">
-                        <img src="images/cat.png" align="center">
-                        <span class="card-title">Thors's Cat</span>
-                    </div>
-                    <div class="card-content">
-                        <p>Thor's cat if for sale</p>
-                    </div>
-                    <div class="card-action">
-                        <a href="#">Place a Bid</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col s6 m3">
-                <div class="card small">
-                    <div class="card-image">
-                        <img src="images/pool.png" align="center">
-                        <span class="card-title">Jim's Pool Equipment</span>
-                    </div>
-                    <div class="card-content">
-                        <p>Jim's pool/snooker equipment is for sale</p>
-                    </div>
-                    <div class="card-action">
-                        <a href="#">Place a Bid</a>
-                    </div>
-                </div>
-            </div>
 
         </div>
 
@@ -134,7 +88,8 @@
                     <label for="comment_box">Write a comment</label>
                 </div>
 
-                <button onclick="postComment()" class="btn-floating waves-effect waves-light blue" style="margin-top: 20px">
+                <button onclick="postComment()" class="btn-floating waves-effect waves-light blue"
+                        style="margin-top: 20px">
                     <i class="material-icons">send</i>
                 </button>
             </div>
@@ -164,32 +119,8 @@
     <!--};-->
     <!--firebase.initializeApp(config);-->
     <!--</script>-->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script type="text/javascript">
-        $(function() {
-            var params = {
-                // Request parameters
-                "q": "cats",
-            };
 
-            $.ajax({
-                url: "https://api.cognitive.microsoft.com/bing/v5.0/images/search?" + $.param(params),
-                beforeSend: function(xhrObj){
-                    // Request headers
-                    xhrObj.setRequestHeader("Content-Type","multipart/form-data");
-                    xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","1969f0d261b044fb8b640f1e9828cb53");
-                },
-                // Request body
-                data: "{body}",
-            })
-                .done(function(data) {
-                    console.log(data);
-                    alert("success");
-                })
-                .fail(function(err) {
-                    console.log(err);
-                });
-        });
     </script>
 
 </div>

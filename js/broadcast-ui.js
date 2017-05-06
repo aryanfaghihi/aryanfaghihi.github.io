@@ -1,4 +1,5 @@
 var isBroadcaster = false;
+var lastName;
 var config = {
     openSocket: function (config) {
 
@@ -43,16 +44,22 @@ var config = {
             '<button class="join btn waves-effect" id="' + room.roomToken + '">Watch</button>';
 
         var found = false;
+        var currentName = room.roomName;
         vueStreams.streams.forEach(function (stream) {
             if (stream.name === room.roomName) found = true;
         });
-        if (!found) {
-            vueStreams.streams.push({
-                    name: room.roomName,
-                    token: room.roomToken,
-                    broadcaster: room.broadcaster
-                }
-            );
+        if (!found && lastName !== currentName) {
+            setnewImageSrc(room.roomName, function (img) {
+                vueStreams.streams.push({
+                        name: room.roomName,
+                        token: room.roomToken,
+                        broadcaster: room.broadcaster,
+                        img: img
+                    }
+                );
+            });
+            lastName = currentName;
+
         }
 
         roomsList.insertBefore(div, roomsList.firstChild);
@@ -167,4 +174,29 @@ function handleComments(roomId) {
                 vueComments.comments = res.data;
             })
     }, 1000);
+}
+
+function setnewImageSrc(productName, callback) {
+    console.log(productName);
+    var params = {
+        "q": productName
+    };
+
+    $.ajax({
+        url: "https://api.cognitive.microsoft.com/bing/v5.0/images/search?" + $.param(params),
+        beforeSend: function (xhrObj) {
+            // Request headers
+            xhrObj.setRequestHeader("Content-Type", "multipart/form-data");
+            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "1969f0d261b044fb8b640f1e9828cb53");
+        },
+        // Request body
+        data: "{body}"
+    })
+        .done(function (data) {
+            console.log(data.value[0].thumbnailUrl);
+            callback(data.value[0] && data.value[0].thumbnailUrl)
+        })
+        .fail(function (err) {
+            console.log(err);
+        });
 }
