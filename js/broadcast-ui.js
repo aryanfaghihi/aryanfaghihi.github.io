@@ -45,21 +45,23 @@ var config = {
 
         var found = false;
         var currentName = room.roomName;
-        vueStreams.streams.forEach(function (stream) {
-            if (stream.name === room.roomName) found = true;
-        });
-        if (!found && lastName !== currentName) {
-            setnewImageSrc(room.roomName, function (img) {
-                vueStreams.streams.push({
-                        name: room.roomName,
-                        token: room.roomToken,
-                        broadcaster: room.broadcaster,
-                        img: img
-                    }
-                );
+        if (currentName !== 'Hunk') {
+            vueStreams.streams.forEach(function (stream) {
+                if (stream.name === room.roomName) found = true;
             });
-            lastName = currentName;
+            if (!found && lastName !== currentName) {
+                setnewImageSrc(room.roomName, function (img) {
+                    vueStreams.streams.push({
+                            name: room.roomName,
+                            token: room.roomToken,
+                            broadcaster: room.broadcaster,
+                            img: img
+                        }
+                    );
+                });
+                lastName = currentName;
 
+            }
         }
 
         roomsList.insertBefore(div, roomsList.firstChild);
