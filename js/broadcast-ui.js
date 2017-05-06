@@ -134,7 +134,6 @@ var vueComments = new Vue({
         comments: [],
         streams: [],
         showComments: false
-
     }
 });
 
@@ -160,6 +159,7 @@ var vueStreams = new Vue({
 
 function handleComments(roomId) {
     ROOMID = roomId;
+    vueComments.showComments = true;
     setInterval(function () {
         axios.get(commentsDomain + '/comments?roomId=' + roomId)
             .then(function (res) {
