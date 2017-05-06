@@ -131,6 +131,7 @@ function showComments(roomId) {
     // HIDE THE ROOMS
     $('.visible').hide();
     $('#comments').show();
+    vueStreams.hideStreams = true;
     vueComments.showComments = true;
     handleComments(roomId)
 }
@@ -140,14 +141,29 @@ var vueComments = new Vue({
     data: {
         comments: [],
         streams: [],
+        currentBid: 10,
         showComments: false
+    },
+    methods: {
+        bid: function () {
+            this.currentBid = this.currentBid + 10;
+            axios.post(commentsDomain + '/comments?roomId=' + ROOMID, {
+                type: 'bid',
+                bid: this.currentBid,
+                date: new Date
+            })
+                .then(function (response) {
+                    console.log(response.data);
+                })
+        }
     }
 });
 
 var vueStreams = new Vue({
     el: '#streams',
     data: {
-        streams: []
+        streams: [],
+        hideStreams: false
     },
     methods: {
         watchStream: function (data) {
@@ -167,11 +183,15 @@ var vueStreams = new Vue({
 function handleComments(roomId) {
     ROOMID = roomId;
     vueComments.showComments = true;
+    vueStreams.hideStreams = true;
     setInterval(function () {
         axios.get(commentsDomain + '/comments?roomId=' + roomId)
             .then(function (res) {
                 console.log(res.data);
                 vueComments.comments = res.data;
+                if (res.data.bids) {
+                    vueComments.currentBid = res.data.bids[res.data.bids.length - 1].bid;
+                }
             })
     }, 1000);
 }
