@@ -124,6 +124,7 @@ function showComments(roomId) {
     // HIDE THE ROOMS
     $('.visible').hide();
     $('#comments').show();
+    vueComments.showComments = true;
     handleComments(roomId)
 }
 
@@ -131,7 +132,8 @@ var vueComments = new Vue({
     el: '#comments',
     data: {
         comments: [],
-        streams: []
+        streams: [],
+        showComments: false
 
     }
 });

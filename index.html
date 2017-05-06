@@ -72,7 +72,7 @@
 
         <div>
         </div>
-        <div id="comments" v-show="comments && comments.length > 0">
+        <div id="comments" v-show="showComments">
             <ul class="collection with-header">
                 <li class="collection-header"><h4>Comments</h4></li>
                 <li class="collection-item" v-show="comments.length == 0">No comments yet</li>
