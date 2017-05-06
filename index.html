@@ -74,13 +74,15 @@
         </div>
         <div id="comments" v-show="showComments">
             <a class="btn grey waves-effect" @click="bid()">Bid $10 more</a>
-            <span class="new badge right" data-badge-caption="" style="font-size: 1rem">Current bid: ${{currentBid}}</span>
+            <span class="new badge right" data-badge-caption=""
+                  style="font-size: 1rem">Current bid: ${{currentBid}}</span>
 
             <ul class="collection with-header">
                 <li class="collection-header"><h4>Comments</h4></li>
                 <li class="collection-item" v-show="comments.length == 0">No comments yet</li>
-                <li class="collection-item" v-for="data in comments.comments">{{data.comment}}
-                    <div><a href="#!" class="secondary-content"></a></div>
+                <li class="collection-item" v-for="data in comments.comments">
+                    <i class="material-icons">person</i>&nbsp;&nbsp;&nbsp;
+                    <span style="vertical-align: super">{{data.comment}}</span>
                 </li>
 
             </ul>
