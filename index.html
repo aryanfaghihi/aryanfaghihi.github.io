@@ -119,9 +119,21 @@
     <!--};-->
     <!--firebase.initializeApp(config);-->
     <!--</script>-->
-    <script type="text/javascript">
+</div>
 
-    </script>
+<script>
+    function postComment() {
+        var commentContent = $('#comment_box').val();
+        console.log(typeof commentContent);
+        axios.post(commentsDomain + '/comments?roomId=' + ROOMID, {
+            comment: commentContent
+        })
+            .then(function (response) {
+                console.log(response.data);
+                $('#comment_box').val('');
+            })
+    }
+</script>
 
 </div>
 </body>
