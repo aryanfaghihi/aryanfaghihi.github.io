@@ -53,7 +53,6 @@ var config = {
                     joinUser: div.id
                 });
             });
-            showComments(div.querySelector('.join').id);
         };
     }
 };
@@ -64,6 +63,7 @@ function createButtonClickHandler() {
         broadcastUI.createRoom({
             roomName: (document.getElementById('conference-name') || {}).value || 'Anonymous'
         }, function (roomId) {
+            console.log('call me once');
             showComments(roomId);
         });
     });
@@ -90,7 +90,9 @@ function captureUserMedia(isBroadcaster, callback) {
         });
     }
 
-    callback();
+    else {
+        callback();
+    }
 }
 
 /* on page load: get public rooms */
@@ -107,11 +109,14 @@ function showComments(roomId) {
     console.log('show comments');
     console.log(roomId);
     // HIDE THE ROOMS
-    var visibleElements = document.getElementsByClassName('visible'),
-        length = visibleElements.length;
-    for (var i = 0; i < length; i++) {
-        visibleElements[i].style.display = 'none';
-    }
-
+    $('.visible').hide();
     $('#comments').show();
+    handleComments(roomId)
+}
+
+function handleComments(roomId) {
+    axios.get('http://8923d68a.ngrok.io/comments?roomId=' + roomId)
+        .then(function (res) {
+            console.log(res.data);
+        })
 }
