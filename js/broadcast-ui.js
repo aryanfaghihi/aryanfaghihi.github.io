@@ -29,8 +29,6 @@ var config = {
     },
     onRoomFound: function (room) {
         console.log('BROADCASTER');
-        console.log(room.broadcaster);
-        console.log(room.roomToken);
 
 
         var alreadyExist = document.getElementById(room.broadcaster);
@@ -53,6 +51,7 @@ var config = {
                     joinUser: div.id
                 });
             });
+            handleComments(room.roomToken);
         };
     }
 };
@@ -114,9 +113,21 @@ function showComments(roomId) {
     handleComments(roomId)
 }
 
+var vueComm = new Vue({
+    el: '#comments',
+    data: {
+        comments: []
+    }
+});
+
+
 function handleComments(roomId) {
-    axios.get('http://8923d68a.ngrok.io/comments?roomId=' + roomId)
-        .then(function (res) {
-            console.log(res.data);
-        })
+    ROOMID = roomId;
+    setInterval(function () {
+        axios.get(commentsDomain + '/comments?roomId=' + roomId)
+            .then(function (res) {
+                console.log(res.data);
+                vueComm.comments = res.data;
+            })
+    }, 1000);
 }

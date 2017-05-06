@@ -1,5 +1,6 @@
 var express = require('express'),
     app = express();
+var bodyParser = require('body-parser')
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -9,12 +10,13 @@ var allowCrossDomain = function(req, res, next) {
     next();
 };
 
-
+app.use(bodyParser.json());
 app.use(allowCrossDomain);
 
 var comments = {};
 
 app.get('/comments', function (req, res) {
+    console.log(comments);
     var roomId = req.query.roomId;
     if (comments[roomId]) {
         res.send(comments[roomId]);
@@ -26,8 +28,9 @@ app.get('/comments', function (req, res) {
 
 app.post('/comments', function (req, res) {
     var roomId = req.query.roomId;
+    console.log(req.body);
     if (comments[roomId]) {
-        comments[roomId].push(req.body.comment);
+        comments[roomId].push(req.body);
     }
     else {
         comments[roomId] = [req.body];
